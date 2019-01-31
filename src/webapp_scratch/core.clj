@@ -11,9 +11,20 @@
             [webapp-scratch.misc :as misc]
             [clojure.test :refer :all]))
 
-(deftest urlgen2
-  (testing "I pass in core"
-    (is (= 1 1))))
+(deftest namespaces-on-classpathfn
+  (testing "bultitude testing"
+    (is (= "abc" (b/namespaces-on-classpath :prefix misc/ns-prefix)))))
+
+(deftest varsfn
+  (testing "demo vars testing"
+    (is (= "abc" (first (b/namespaces-on-classpath :prefix misc/ns-prefix))))
+;    (is (= "abc" (vars (first (b/namespaces-on-classpath :prefix misc;/ns-prefix)))))
+    ))
+
+(deftest varsfn2
+  (testing "demo vars testing 2"
+    (is (= "abc" (vars (first (b/namespaces-on-classpath :prefix misc/ns-prefix))))))
+
 
 (defn vars
   [ns]
