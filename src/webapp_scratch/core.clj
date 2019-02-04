@@ -15,17 +15,6 @@
   (testing "bultitude testing"
     (is (= "abc" (b/namespaces-on-classpath :prefix misc/ns-prefix)))))
 
-(deftest varsfn
-  (testing "demo vars testing"
-    (is (= "abc" (first (b/namespaces-on-classpath :prefix misc/ns-prefix))))
-;    (is (= "abc" (vars (first (b/namespaces-on-classpath :prefix misc;/ns-prefix)))))
-    ))
-
-(deftest varsfn2
-  (testing "demo vars testing 2"
-    (is (= "abc" (vars (first (b/namespaces-on-classpath :prefix misc/ns-prefix))))))
-
-
 (defn vars
   [ns]
   {:namespace ns
@@ -34,12 +23,30 @@
    :route-prefix (misc/ns->context ns)
    :page (ns-resolve ns 'page)})
 
+(deftest varsfn2
+  (testing "demo vars testing 2"
+    (is (= "abc" (vars (first (b/namespaces-on-classpath :prefix misc/ns-prefix)))))
+    ))
+
+
 (def list-of-maps (->> (b/namespaces-on-classpath :prefix misc/ns-prefix)
                        distinct
                        (map #(do (require %) (the-ns %)))
                        (map vars)
                        (filter #(:page %))
                        (sort-by :ns-name)))
+
+(deftest namespace
+  (testing "namespace generation"
+    (is (= "abc" (map #(do (require %) (the-ns %)) (b/namespaces-on-classpath :prefix misc/ns-prefix)))))
+  (testing "vars gen"
+    (is (= "abc" (map vars (map #(do (require %) (the-ns %)) (b/namespaces-on-classpath :prefix misc/ns-prefix)))))))
+
+(deftest filtersortby
+  (testing "filter page"
+    (is (= "abc" (filter (#(:page %) (map vars (map #(do (require %) (the-ns %)) (b/namespaces-on-classpath :prefix misc/ns-prefix))))))))
+  (testing "sort-by ns-name"
+    (is (= "abc" (sort-by :ns-name (filter (#(:page %) (map vars (map #(do (require %) (the-ns %)) (b/namespaces-on-classpath :prefix misc/ns-prefix))))))))))
 
 (defroutes landing
   (GET "/" req (html5 [:ul
