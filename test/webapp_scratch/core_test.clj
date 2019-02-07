@@ -1,3 +1,4 @@
+
 (ns webapp-scratch.core-test
   (:require [clojure.test :refer :all]
             [webapp-scratch.core :refer :all]
@@ -25,3 +26,4 @@
 ;(deftest namespaces-on-classpathfn
 ;  (testing "bultitude testing"
 ;    (is (= "abc" (b/namespaces-on-classpath :prefix misc/ns-prefix))));)
+
